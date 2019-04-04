@@ -4,7 +4,7 @@
   "description": "415 Tickets WebApp",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "author": "Subal Sapkota",
   "license": "ISC",
