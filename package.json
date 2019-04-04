@@ -1,0 +1,15 @@
+{
+  "name": "nodejs-tickets",
+  "version": "1.0.0",
+  "description": "415 Tickets WebApp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Subal Sapkota",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "joi": "^14.3.1"
+  }
+}
