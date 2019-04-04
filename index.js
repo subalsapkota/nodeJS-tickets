@@ -6,9 +6,9 @@ app.use(express.json());
 
 //Storing tickets in memory as array
 const tickets = [
-    {id: 1, type: 'incident', subject: 'Something broke'},
-    {id: 2, type: 'incident', subject: 'Everything broke'},
-    {id: 3, type: 'incident', subject: 'No idea what broke'}
+    {id: 1, type: 'incident', subject: 'Something broke', created_at: new Date()},
+    {id: 2, type: 'incident', subject: 'Everything broke', created_at: new Date()},
+    {id: 3, type: 'incident', subject: 'No idea what broke', created_at: new Date()}
 ];
 
 app.get('/', (req, res) => { 
@@ -23,7 +23,7 @@ app.get('/rest/list', (req, res) => {
 app.post('/rest/ticket', (req, res) => {
     const schema = {
         type: Joi.string().required(),
-        subject: Joi.string().min(10).required()
+        subject: Joi.string().min(10).required(),
     };
 
     const result = Joi.validate(req.body, schema);
@@ -34,10 +34,12 @@ app.post('/rest/ticket', (req, res) => {
         return;
     }
 
+    var dateNow = new Date();
     const ticket = {
         id: tickets.length + 1,
         type: req.body.type,
-        subject: req.body.subject
+        subject: req.body.subject,
+        created_at: dateNow
     };
     tickets.push(ticket);
     res.send(ticket);
