@@ -103,7 +103,7 @@ app.get("/rest/ticket/:id", (req, res) => {
 
 app.put("/rest/ticket/:id", function(req, res) {
   var updateTicket = req.body;
-  //delete updateTicket.id;
+  delete updateTicket.id;
 
   db.collection(TICKETS_COLLECTION).updateOne(
     { id: parseInt(req.params.id) },
