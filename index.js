@@ -101,7 +101,7 @@ app.get("/rest/ticket/:id", (req, res) => {
   );
 });
 
-//Could not get PUT api working with "updateOne" so deleing and adding to achieve similar function
+//Could not get PUT api working with "updateOne" so deleting and adding to achieve similar function
 
 app.put("/rest/ticket/:id", function(req, res) {
   var updateTicket = req.body;
@@ -124,7 +124,7 @@ app.put("/rest/ticket/:id", function(req, res) {
     if (err) {
       handleError(res, err.message, "Failed to create new ticket");
     } else {
-      res.status(200).json(updateTicket);
+      res.status(201).json(doc.ops[0]);
     }
   });
 });
