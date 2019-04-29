@@ -120,7 +120,7 @@ app.put("/rest/ticket/:id", function(req, res) {
     if (err) {
       handleError(res, err.message, "Failed to create new ticket");
     } else {
-      res.status(201).json(newTicket);
+      res.status(200).json(newTicket);
     }
   });
 });
