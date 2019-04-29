@@ -102,21 +102,27 @@ app.get("/rest/ticket/:id", (req, res) => {
 });
 
 app.put("/rest/ticket/:id", function(req, res) {
-  var updateTicket = req.body;
-  delete updateTicket.id;
-
-  db.collection(TICKETS_COLLECTION).updateOne(
+  db.collection(TICKETS_COLLECTION).deleteOne(
     { id: parseInt(req.params.id) },
-    updateTicket,
-    function(err, doc) {
+    function(err, result) {
       if (err) {
-        handleError(res, err.message, "Failed to update ticket");
+        handleError(res, err.message, "Failed to delete ticket");
       } else {
-        updateTicket.id = req.params.id;
-        res.status(200).json(updateTicket);
+        res.status(200).json(req.params.id);
       }
     }
   );
+
+  var newTicket = req.body;
+  newTicket.createDate = new Date();
+  newTicket.id = parseInt(req.params.id);
+  db.collection(TICKETS_COLLECTION).insertOne(newTicket, function(err, doc) {
+    if (err) {
+      handleError(res, err.message, "Failed to create new ticket");
+    } else {
+      res.status(201).json(doc.ops[0]);
+    }
+  });
 });
 
 app.delete("/rest/ticket/:id", function(req, res) {
