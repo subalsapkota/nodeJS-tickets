@@ -102,18 +102,18 @@ app.get("/rest/ticket/:id", (req, res) => {
 });
 
 app.put("/rest/ticket/:id", function(req, res) {
-  var updateDoc = req.body;
-  delete updateDoc._id;
+  var updateTicket = req.body;
+  //delete updateTicket.id;
 
   db.collection(TICKETS_COLLECTION).updateOne(
-    { _id: new ObjectID(req.params._id) },
-    updateDoc,
+    { id: parseInt(req.params.id) },
+    updateTicket,
     function(err, doc) {
       if (err) {
-        handleError(res, err.message, "Failed to update contact");
+        handleError(res, err.message, "Failed to update ticket");
       } else {
-        updateDoc._id = req.params.id;
-        res.status(200).json(updateDoc);
+        updateTicket.id = req.params.id;
+        res.status(200).json(updateTicket);
       }
     }
   );
