@@ -105,8 +105,6 @@ app.get("/rest/ticket/:id", (req, res) => {
 
 app.put("/rest/ticket/:id", function(req, res) {
   var updateTicket = req.body;
-  updateTicket.createDate = new Date();
-  updateTicket.id = req.params.id;
 
   db.collection(TICKETS_COLLECTION).deleteOne(
     { id: parseInt(req.params.id) },
@@ -114,10 +112,13 @@ app.put("/rest/ticket/:id", function(req, res) {
       if (err) {
         handleError(res, err.message, "Failed to delete ticket");
       } else {
-        res.status(200).json(updateTicket);
+        res.status(200).json(req.params.id);
       }
     }
   );
+
+  updateTicket.createDate = new Date();
+  updateTicket.id = req.params.id;
 
   db.collection(TICKETS_COLLECTION).insertOne(updateTicket, function(err, doc) {
     if (err) {
