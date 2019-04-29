@@ -106,7 +106,7 @@ app.put("/rest/ticket/:id", function(req, res) {
   delete updateDoc._id;
 
   db.collection(TICKETS_COLLECTION).updateOne(
-    { _id: new ObjectID(req.params.id) },
+    { _id: new ObjectID(req.params._id) },
     updateDoc,
     function(err, doc) {
       if (err) {
