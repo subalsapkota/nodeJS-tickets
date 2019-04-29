@@ -101,32 +101,22 @@ app.get("/rest/ticket/:id", (req, res) => {
   );
 });
 
-//Could not get PUT api working with "updateOne" so deleting and adding to achieve similar function
-
 app.put("/rest/ticket/:id", function(req, res) {
-  var updateTicket = req.body;
+  var updateDoc = req.body;
+  delete updateDoc._id;
 
-  db.collection(TICKETS_COLLECTION).deleteOne(
-    { id: parseInt(req.params.id) },
-    function(err, result) {
+  db.collection(TICKETS_COLLECTION).updateOne(
+    { _id: new ObjectID(req.params.id) },
+    updateDoc,
+    function(err, doc) {
       if (err) {
-        handleError(res, err.message, "Failed to delete ticket");
+        handleError(res, err.message, "Failed to update contact");
       } else {
-        res.status(200);
+        updateDoc._id = req.params.id;
+        res.status(200).json(updateDoc);
       }
     }
   );
-
-  updateTicket.createDate = new Date();
-  updateTicket.id = req.params.id;
-
-  db.collection(TICKETS_COLLECTION).insertOne(updateTicket, function(err, doc) {
-    if (err) {
-      handleError(res, err.message, "Failed to create new ticket");
-    } else {
-      res.status(200).json(updateTicket);
-    }
-  });
 });
 
 app.delete("/rest/ticket/:id", function(req, res) {
