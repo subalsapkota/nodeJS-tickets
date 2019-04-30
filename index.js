@@ -103,17 +103,24 @@ app.get("/rest/ticket/:id", (req, res) => {
 
 //Could not figure out how to use update function.
 app.put("/rest/ticket/:id", function(req, res) {
-  var updateTicket = req.body;
-  //delete updateTicket.id;
-
-  db.collection(TICKETS_COLLECTION).updateOne(
+  db.collection(TICKETS_COLLECTION).deleteOne(
     { id: parseInt(req.params.id) },
-    updateTicket,
-    function(err, doc) {
-      updateTicket.id = req.params.id;
-      res.status(200).json(updateTicket);
+    function(err, obj) {
+      if (err) throw err;
+      console.log("Deleted");
     }
   );
+
+  var newTicket = req.body;
+  newTicket.createDate = new Date();
+  newTicket.id = parseInt(req.params.id);
+  db.collection(TICKETS_COLLECTION).insertOne(newTicket, function(err, doc) {
+    if (err) {
+      handleError(res, err.message, "Failed to create new ticket");
+    } else {
+      res.status(201).json(doc.ops[0]);
+    }
+  });
 });
 
 app.delete("/rest/ticket/:id", function(req, res) {
