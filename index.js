@@ -58,6 +58,7 @@ app.get("/rest/list", (req, res) => {
 });
 
 app.post("/rest/ticket", async (req, res) => {
+  //Validation using Joi
   const schema = {
     type: Joi.string().required(),
     subject: Joi.string()
@@ -114,6 +115,7 @@ app.put("/rest/ticket/:id", function(req, res) {
     }
   );
 
+  //Validation for updates
   const schema = {
     type: Joi.string().required(),
     subject: Joi.string()
@@ -134,7 +136,7 @@ app.put("/rest/ticket/:id", function(req, res) {
   newTicket.id = parseInt(req.params.id);
   db.collection(TICKETS_COLLECTION).insertOne(newTicket, function(err, doc) {
     if (err) {
-      handleError(res, err.message, "Failed to create new ticket");
+      handleError(res, err.message, "Failed to update ticket");
     } else {
       res.status(201).json(doc.ops[0]);
     }
