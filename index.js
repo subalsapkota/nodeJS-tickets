@@ -101,15 +101,33 @@ app.get("/rest/ticket/:id", (req, res) => {
   );
 });
 
-//Could not figure out how to use update function.
+//Could not figure PUT with updateOne function so used delete and add for similar functionality
 app.put("/rest/ticket/:id", function(req, res) {
   db.collection(TICKETS_COLLECTION).deleteOne(
     { id: parseInt(req.params.id) },
     function(err, obj) {
-      if (err) throw err;
-      console.log("Deleted");
+      if (err) {
+        handleError(res, err.message, "Failed to update ticket");
+      } else {
+        console.log("Deleted");
+      }
     }
   );
+
+  const schema = {
+    type: Joi.string().required(),
+    subject: Joi.string()
+      .min(10)
+      .required()
+  };
+
+  const result = Joi.validate(req.body, schema);
+  console.log(result);
+
+  if (result.error) {
+    res.status(400).send(result.error.details[0].message);
+    return;
+  }
 
   var newTicket = req.body;
   newTicket.createDate = new Date();
