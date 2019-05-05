@@ -5,7 +5,7 @@ const mongodb = require("mongodb");
 var fs = require("fs");
 var parser = require("xml2json");
 var jsonParser = require("js2xmlparser");
-
+const request = require("request");
 var noOfTickets;
 
 var TICKETS_COLLECTION = "tickets";
@@ -30,7 +30,7 @@ mongodb.MongoClient.connect(
     console.log("Db connected");
 
     //Initialize the app
-    const port = process.env.PORT || 8080;
+    const port = process.env.PORT || 3000;
     app.listen(port, () =>
       console.log(`Server up and listening on port ${port}`)
     );
@@ -147,7 +147,7 @@ app.put("/rest/ticket/:_id", function(req, res) {
 
 app.delete("/rest/ticket/:_id", function(req, res) {
   db.collection(TICKETS_COLLECTION).deleteOne(
-    { id: parseInt(req.params._id) },
+    { _id: parseInt(req.params._id) },
     function(err, result) {
       if (err) {
         handleError(res, err.message, "Failed to delete ticket");
@@ -158,7 +158,7 @@ app.delete("/rest/ticket/:_id", function(req, res) {
   );
 });
 
-app.get("/rest/xml/ticket/:_id", function(req, res) {
+/*app.get("/rest/xml/ticket/:_id", function(req, res) {
   db.collection(TICKETS_COLLECTION).findOne(
     { _id: parseInt(req.params._id) },
     function(err, doc) {
@@ -167,6 +167,19 @@ app.get("/rest/xml/ticket/:_id", function(req, res) {
       } else {
         res.status(200).send(jsonParser.parse("ticket", doc));
       }
+    }
+  );
+});*/
+
+app.get("rest/xml/ticket/:_id", function(req, res) {
+  request(
+    "https://tickets-subal-415.herokuapp.com/rest/ticket/${req.params._id}",
+    function(err, res, body) {
+      console.error("error", err);
+      console.log("body:", body);
+    },
+    function(res) {
+      console.log(body);
     }
   );
 });
