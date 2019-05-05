@@ -172,14 +172,14 @@ app.delete("/rest/ticket/:_id", function(req, res) {
 });*/
 
 app.get("rest/xml/ticket/:_id", function(req, res) {
-  request(
-    "https://tickets-subal-415.herokuapp.com/rest/ticket/${req.params._id}",
-    function(err, res, body) {
-      console.error("error", err);
-      console.log("body:", body);
-    },
-    function(res) {
-      console.log(body);
+  var idHere = req.params.id;
+  request.get(
+    "https:https://tickets-subal-415.herokuapp.com/rest/ticket/${idHere}",
+    (err, res, body) => {
+      if (!err && res.statusCode == 200) {
+        console.log(body);
+      }
+      res.send.body;
     }
   );
 });
