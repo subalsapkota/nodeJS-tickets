@@ -3,6 +3,8 @@ const express = require("express");
 const app = express();
 const mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
+var fs = require("fs");
+var parser = require("xml2json");
 
 var noOfTickets;
 
@@ -151,6 +153,21 @@ app.delete("/rest/ticket/:id", function(req, res) {
         handleError(res, err.message, "Failed to delete ticket");
       } else {
         res.status(200).json(req.params.id);
+      }
+    }
+  );
+});
+
+app.get("/rest/xml/ticket/:id", function(req, res) {
+  db.collection(TICKETS_COLLECTION).findOne(
+    { id: parseInt(req.params.id) },
+    function(err, doc) {
+      if (err) {
+        handleError(res, err.message, "No ticket with the ID provided");
+      } else {
+        var stringified = JSON.stringify(doc);
+        var xml = parser.toXml(stringified);
+        res.status(200).xml(xml);
       }
     }
   );
