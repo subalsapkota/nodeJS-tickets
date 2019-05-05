@@ -2,7 +2,6 @@ const Joi = require("joi");
 const express = require("express");
 const app = express();
 const mongodb = require("mongodb");
-var ObjectID = mongodb.ObjectID;
 var fs = require("fs");
 var parser = require("xml2json");
 var jsonParser = require("js2xmlparser");
@@ -82,7 +81,7 @@ app.post("/rest/ticket", async (req, res) => {
 
   var newTicket = req.body;
   newTicket.createDate = new Date();
-  newTicket.id = count + 1;
+  newTicket._id = count + 1;
   db.collection(TICKETS_COLLECTION).insertOne(newTicket, function(err, doc) {
     if (err) {
       handleError(res, err.message, "Failed to create new ticket");
@@ -92,9 +91,9 @@ app.post("/rest/ticket", async (req, res) => {
   });
 });
 
-app.get("/rest/ticket/:id", (req, res) => {
+app.get("/rest/ticket/:_id", (req, res) => {
   db.collection(TICKETS_COLLECTION).findOne(
-    { id: parseInt(req.params.id) },
+    { _id: parseInt(req.params._id) },
     function(err, doc) {
       if (err) {
         handleError(res, err.message, "No ticket with the ID provided");
@@ -106,9 +105,9 @@ app.get("/rest/ticket/:id", (req, res) => {
 });
 
 //Could not figure PUT with updateOne function so used delete and add for similar functionality
-app.put("/rest/ticket/:id", function(req, res) {
+app.put("/rest/ticket/:_id", function(req, res) {
   db.collection(TICKETS_COLLECTION).deleteOne(
-    { id: parseInt(req.params.id) },
+    { _id: parseInt(req.params._id) },
     function(err, obj) {
       if (err) {
         handleError(res, err.message, "Failed to update ticket");
@@ -136,7 +135,7 @@ app.put("/rest/ticket/:id", function(req, res) {
 
   var newTicket = req.body;
   newTicket.createDate = new Date();
-  newTicket.id = parseInt(req.params.id);
+  newTicket._id = parseInt(req.params._id);
   db.collection(TICKETS_COLLECTION).insertOne(newTicket, function(err, doc) {
     if (err) {
       handleError(res, err.message, "Failed to update ticket");
@@ -146,22 +145,22 @@ app.put("/rest/ticket/:id", function(req, res) {
   });
 });
 
-app.delete("/rest/ticket/:id", function(req, res) {
+app.delete("/rest/ticket/:_id", function(req, res) {
   db.collection(TICKETS_COLLECTION).deleteOne(
-    { id: parseInt(req.params.id) },
+    { id: parseInt(req.params._id) },
     function(err, result) {
       if (err) {
         handleError(res, err.message, "Failed to delete ticket");
       } else {
-        res.status(200).json(req.params.id);
+        res.status(200).json(req.params._id);
       }
     }
   );
 });
 
-app.get("/rest/xml/ticket/:id", function(req, res) {
+app.get("/rest/xml/ticket/:_id", function(req, res) {
   db.collection(TICKETS_COLLECTION).findOne(
-    { id: parseInt(req.params.id) },
+    { _id: parseInt(req.params._id) },
     function(err, doc) {
       if (err) {
         handleError(res, err.message, "No ticket with the ID provided");
