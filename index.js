@@ -167,7 +167,7 @@ app.get("/rest/xml/ticket/:id", function(req, res) {
       } else {
         var stringified = JSON.stringify(doc);
         var xml = parser.toXml(stringified);
-        res.status(200).xml(xml);
+        res.status(200).send(xml);
       }
     }
   );
