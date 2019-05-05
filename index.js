@@ -165,8 +165,9 @@ app.get("/rest/xml/ticket/:id", function(req, res) {
       if (err) {
         handleError(res, err.message, "No ticket with the ID provided");
       } else {
-        var xml = parser.toXml(doc);
-        res.status(200).send(xml);
+        var stringify = JSON.stringify(doc);
+        var xml = parser.toXml(stringify);
+        res.send(xml);
       }
     }
   );
