@@ -5,6 +5,7 @@ const mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
 var fs = require("fs");
 var parser = require("xml2json");
+var jsonParser = require("js2xmlparser");
 
 var noOfTickets;
 
@@ -165,9 +166,7 @@ app.get("/rest/xml/ticket/:id", function(req, res) {
       if (err) {
         handleError(res, err.message, "No ticket with the ID provided");
       } else {
-        var stringify = JSON.stringify(doc);
-        var xml = parser.toXml(stringify);
-        res.send(xml);
+        res.status(200).send(jsonParser.parse("ticket", doc));
       }
     }
   );
