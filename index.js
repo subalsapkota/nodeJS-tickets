@@ -92,6 +92,7 @@ app.post("/rest/ticket", async (req, res) => {
 });
 
 app.get("/rest/ticket/:_id", (req, res) => {
+  console.log(req.params._id);
   db.collection(TICKETS_COLLECTION).findOne(
     { _id: parseInt(req.params._id) },
     function(err, doc) {
@@ -158,28 +159,17 @@ app.delete("/rest/ticket/:_id", function(req, res) {
   );
 });
 
-/*app.get("/rest/xml/ticket/:_id", function(req, res) {
-  db.collection(TICKETS_COLLECTION).findOne(
-    { _id: parseInt(req.params._id) },
-    function(err, doc) {
-      if (err) {
-        handleError(res, err.message, "No ticket with the ID provided");
-      } else {
-        res.status(200).send(jsonParser.parse("ticket", doc));
-      }
+app.get("/rest/xml/ticket/:_id", function(req, res) {
+  var url =
+    "http://tickets-subal-415.herokuapp.com/rest/ticket/" + req.params._id;
+  request(url, function(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var info = JSON.parse(body);
+      res.status(200).send(jsonParser.parse("ticket", info));
     }
-  );
-});*/
+  });
+});
 
-app.get("rest/xml/ticket/:_id", function(req, res) {
-  var idHere = req.params.id;
-  request.get(
-    "https:https://tickets-subal-415.herokuapp.com/rest/ticket/${idHere}",
-    (err, res, body) => {
-      if (!err && res.statusCode == 200) {
-        console.log(body);
-      }
-      res.send.body;
-    }
-  );
+app.post("rest/xml/ticket", function(req, res) {
+  console.log("yeet");
 });
