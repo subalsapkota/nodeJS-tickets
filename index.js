@@ -45,6 +45,10 @@ function handleError(res, reason, message, code) {
 app.get("/", (req, res) => {
   res.send("Welcome to the root :)");
   console.log("Server listening on root");
+  var myXML =
+    "<ticket><type>incident</type><subject>Somthing broke</subject></ticket>";
+  ticket = parser.toJson(myXML);
+  console.log(ticket);
 });
 
 app.get("/rest/list", (req, res) => {
@@ -70,6 +74,7 @@ app.post("/rest/ticket", async (req, res) => {
 
   const result = Joi.validate(req.body, schema);
   console.log(result);
+  console.log(req.body);
 
   if (result.error) {
     res.status(400).send(result.error.details[0].message);
@@ -171,5 +176,14 @@ app.get("/rest/xml/ticket/:_id", function(req, res) {
 });
 
 app.post("rest/xml/ticket", function(req, res) {
-  console.log("yeet");
+  var body = parser.toJson(req.body);
+  request.post(
+    "http://localhost:3000/rest/ticket/",
+    { json: { type: body.type, subject: body.subject } },
+    function(err, response, body) {
+      if (!error && response.statusCode == 200) {
+        console.log(body);
+      }
+    }
+  );
 });
