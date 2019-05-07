@@ -48,7 +48,23 @@ app.get("/", (req, res) => {
   var myXML =
     "<ticket><type>incident</type><subject>Somthing broke</subject></ticket>";
   ticket = parser.toJson(myXML);
+  var myJson = {
+    type: "incident",
+    suject: "yeet"
+  };
   console.log(ticket);
+
+  request(
+    {
+      url: "http://tickets-subal-415.herokuapp.com/rest/ticket",
+      method: "POST",
+      json: true,
+      body: myJson
+    },
+    function(error, response, body) {
+      console.log(response);
+    }
+  );
 });
 
 app.get("/rest/list", (req, res) => {
@@ -177,13 +193,15 @@ app.get("/rest/xml/ticket/:_id", function(req, res) {
 
 app.post("rest/xml/ticket", function(req, res) {
   var body = parser.toJson(req.body);
+  console.log(body);
   request.post(
-    "http://localhost:3000/rest/ticket/",
-    { json: { type: body.type, subject: body.subject } },
-    function(err, response, body) {
-      if (!error && response.statusCode == 200) {
-        console.log(body);
-      }
+    {
+      url: "http://tickets-subal-415.herokuapp.com/rest/ticket",
+      body: body,
+      json: true
+    },
+    function(err, res, body) {
+      console.log(body);
     }
   );
 });
