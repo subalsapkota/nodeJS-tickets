@@ -187,7 +187,7 @@ app.post("/rest/xml/ticket", function(req, response) {
     },
     function(err, res) {
       //console.log(res.body);
-      response.send("Ticket with succesfully saved" + json(res.body));
+      response.send("Ticket with succesfully saved");
     }
   );
 });
