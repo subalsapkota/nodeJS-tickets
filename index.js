@@ -6,11 +6,13 @@ var fs = require("fs");
 var parser = require("xml2json");
 var jsonParser = require("js2xmlparser");
 const request = require("request");
+const expressBodyParser = require("express-xml-bodyparser");
 var noOfTickets;
 
 var TICKETS_COLLECTION = "tickets";
 
 app.use(express.json());
+app.use(expressBodyParser());
 
 //Database variable to reuse outside connectino callback
 var db;
@@ -175,17 +177,23 @@ app.get("/rest/xml/ticket/:_id", function(req, res) {
   });
 });
 
-app.post("rest/xml/ticket", function(req, res, body) {
-  var bodyHere = parser.toJson(body);
-  console.log(bodyHere);
+app.post("/rest/xml/ticket", function(req, response) {
+  let ticketToPost = req.body["ticket"];
   request.post(
     {
       url: "http://tickets-subal-415.herokuapp.com/rest/ticket",
-      body: bodyHere,
+      body: {
+        type: ticketToPost["type"] == undefined ? "" : ticketToPost["type"][0],
+        subject:
+          ticketToPost["subject"] == undefined ? "" : ticketToPost["subject"][0]
+      },
       json: true
     },
-    function(err, res, body) {
-      console.log(bodyHere);
+    function(err, res) {
+      console.log(res.body);
+      response.send(
+        "Ticket with id " + res.body._id + " succesfully saved in db"
+      );
     }
   );
 });
