@@ -156,7 +156,7 @@ app.delete("/rest/ticket/:_id", function(req, res) {
       if (err) {
         handleError(res, err.message, "Failed to delete ticket");
       } else {
-        res.status(200).json(req.params._id);
+        res.status(200).send("Ticket Deleted!");
       }
     }
   );
