@@ -186,10 +186,8 @@ app.post("/rest/xml/ticket", function(req, response) {
       json: true
     },
     function(err, res) {
-      console.log(res.body);
-      response.send(
-        "Ticket with id " + res.body._id + " succesfully saved in db"
-      );
+      //console.log(res.body);
+      response.send("Ticket with succesfully saved" + res.body);
     }
   );
 });
