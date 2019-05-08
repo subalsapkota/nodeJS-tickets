@@ -144,7 +144,7 @@ app.put("/rest/ticket/:_id", function(req, res) {
     if (err) {
       handleError(res, err.message, "Failed to update ticket");
     } else {
-      res.send("Ticket added:" + json(doc.ops[0]));
+      res.send("Ticket added:" + doc.ops[0]);
     }
   });
 });
