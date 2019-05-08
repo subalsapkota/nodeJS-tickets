@@ -144,7 +144,7 @@ app.put("/rest/ticket/:_id", function(req, res) {
     if (err) {
       handleError(res, err.message, "Failed to update ticket");
     } else {
-      res.send("Ticket added:" + doc.ops[0]);
+      res.status(201).json(doc.ops[0]);
     }
   });
 });
@@ -156,7 +156,7 @@ app.delete("/rest/ticket/:_id", function(req, res) {
       if (err) {
         handleError(res, err.message, "Failed to delete ticket");
       } else {
-        res.status(200).json(req.params._id);
+        res.status(200).send("Ticket with id " + res.body._id + "deleted");
       }
     }
   );
