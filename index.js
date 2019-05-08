@@ -47,10 +47,6 @@ function handleError(res, reason, message, code) {
 app.get("/", (req, res) => {
   res.send("Welcome to the root :)");
   console.log("Server listening on root");
-  var myXML =
-    "<ticket><type>incident</type><subject>Somthing broke</subject></ticket>";
-  ticket = parser.toJson(myXML);
-  console.log(ticket);
 });
 
 app.get("/rest/list", (req, res) => {
